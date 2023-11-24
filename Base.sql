@@ -129,7 +129,6 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `trabajo_practico`.`Especialidad` (
   `idEspecialidad` INT NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(45) NULL,
-  `descripcion` LONGTEXT NULL,
   PRIMARY KEY (`idEspecialidad`))
 ENGINE = InnoDB;
 

@@ -1,27 +1,34 @@
 package com.example.entities;
 
+
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
-public class HelpDesk {
+@Table
+public class Especialidad {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
-    private Integer idHelpDesk;
+    private Integer idEspecialidad;
+
     @Column
     private String nombre;
-    
-    public Integer getIdHelpDesk() {
-        return idHelpDesk;
+
+
+
+    public Integer getIdEspecialidad() {
+        return idEspecialidad;
     }
 
-    public void setIdHelpDesk(Integer idHelpDesk) {
-        this.idHelpDesk = idHelpDesk;
+    public void setIdEspecialidad(Integer idEspecialidad) {
+        this.idEspecialidad = idEspecialidad;
     }
 
     public String getNombre() {
@@ -31,4 +38,7 @@ public class HelpDesk {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+
+
+
 }
