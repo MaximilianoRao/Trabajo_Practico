@@ -1,5 +1,7 @@
 package com.example.entities;
 
+import java.util.List;
+
 import com.example.constant.TipoNotificacion;
 
 import jakarta.persistence.Column;
@@ -9,7 +11,11 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+
 
 @Entity
 @Table
@@ -25,6 +31,12 @@ public class Tecnico {
     @Column
     @Enumerated(EnumType.STRING)
     private TipoNotificacion notificacion;
+
+    @ManyToMany
+    @JoinTable(name = "tecnico_has_especialidad", joinColumns = @JoinColumn(name = "idTecnico"),
+    inverseJoinColumns = @JoinColumn(name ="idEspecialidad"))
+    private List<Especialidad> especialidades;
+
 
     public Integer getIdTecnico() {
         return idTecnico;
@@ -49,4 +61,14 @@ public class Tecnico {
     public void setNotificacion(TipoNotificacion notificacion) {
         this.notificacion = notificacion;
     }
+
+    public List<Especialidad> getEspecialidades() {
+        return especialidades;
+    }
+
+    public void setEspecialidades(List<Especialidad> especialidades) {
+        this.especialidades = especialidades;
+    }
+
+    
 }

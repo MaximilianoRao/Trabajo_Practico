@@ -104,19 +104,14 @@ CREATE TABLE IF NOT EXISTS `trabajo_practico`.`Incidentes` (
   `fechaResolucion` DATETIME NULL,
   `descripcion` LONGTEXT NULL,
   `titulo` VARCHAR(45) NULL,
-  `Help Desk_idHelpDesk` INT NOT NULL,
   `Tecnico_idTecnico` INT NOT NULL,
   `Servicios_idServicio` INT NOT NULL,
   `estado` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`idIncidente`, `Help Desk_idHelpDesk`, `Tecnico_idTecnico`, `Servicios_idServicio`),
-  INDEX `fk_Incidentes_Help Desk1_idx` (`Help Desk_idHelpDesk` ASC) VISIBLE,
+  `HelpDesk_idHelpDesk` INT NOT NULL,
+  PRIMARY KEY (`idIncidente`, `Tecnico_idTecnico`, `Servicios_idServicio`, `HelpDesk_idHelpDesk`),
   INDEX `fk_Incidentes_Tecnico1_idx` (`Tecnico_idTecnico` ASC) VISIBLE,
   INDEX `fk_Incidentes_Servicios1_idx` (`Servicios_idServicio` ASC) VISIBLE,
-  CONSTRAINT `fk_Incidentes_Help Desk1`
-    FOREIGN KEY (`Help Desk_idHelpDesk`)
-    REFERENCES `trabajo_practico`.`HelpDesk` (`idHelpDesk`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+  INDEX `fk_Incidentes_HelpDesk1_idx` (`HelpDesk_idHelpDesk` ASC) VISIBLE,
   CONSTRAINT `fk_Incidentes_Tecnico1`
     FOREIGN KEY (`Tecnico_idTecnico`)
     REFERENCES `trabajo_practico`.`Tecnico` (`idTecnico`)
@@ -125,6 +120,11 @@ CREATE TABLE IF NOT EXISTS `trabajo_practico`.`Incidentes` (
   CONSTRAINT `fk_Incidentes_Servicios1`
     FOREIGN KEY (`Servicios_idServicio`)
     REFERENCES `trabajo_practico`.`Servicios` (`idServicio`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Incidentes_HelpDesk1`
+    FOREIGN KEY (`HelpDesk_idHelpDesk`)
+    REFERENCES `trabajo_practico`.`HelpDesk` (`idHelpDesk`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;

@@ -1,16 +1,26 @@
 package com.example.context;
 
+import com.example.entities.HelpDesk;
+import com.example.entities.Servicio;
+import com.example.entities.Tecnico;
 import com.example.state.Estado;
 import java.time.LocalDateTime;
+import com.example.entities.TipoProblema;
+
+
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import java.util.List;
 
 @Entity
 @Table(name = "incidentes")
@@ -24,7 +34,7 @@ public class Incidente {
     
 
     @Column
-    private String notaCiere;
+    private String notaCierre;
 
     @Column
     private LocalDateTime fechaApertura;
@@ -48,21 +58,26 @@ public class Incidente {
     private Estado state;
 
     @ManyToOne
-    @JoinColumn(name = "Help Desk_idHelpDesk")
-    private Integer help_desk;
+    @JoinColumn(name = "HelpDesk_idHelpDesk")
+    private HelpDesk help_desk;
 
     @ManyToOne
     @JoinColumn(name = "Tecnico_idTecnico")
-    private Integer tecnico;
+    private Tecnico tecnico;
 
     @ManyToOne
     @JoinColumn(name = "Servicios_idServicio")
-    private Integer servicio;
+    private Servicio servicio;
+
+    @ManyToMany
+    @JoinTable(name = "incidentes_has_tipo_de_problema", joinColumns = @JoinColumn(name = "idIncidente"),
+    inverseJoinColumns = @JoinColumn(name ="idTipo"))
+    private List<TipoProblema> tiposDeProblemas;
 
 
-    public Incidente(Integer idIncidente, Estado state) {
-        this.idIncidente = idIncidente;
+    public Incidente(Estado state) {
         this.estado = state.getEstadoAsString();
+        this.state = state;
     }
 
 
@@ -78,13 +93,13 @@ public class Incidente {
     }
 
     public String getNotaCiere() {
-        return notaCiere;
+        return notaCierre;
     }
 
 
 
-    public void setNotaCiere(String notaCiere) {
-        this.notaCiere = notaCiere;
+    public void setNotaCiere(String notaCierre) {
+        this.notaCierre = notaCierre;
     }
 
 
@@ -185,6 +200,66 @@ public class Incidente {
         this.estado = estado;
     }
 
-    
+
+
+    public HelpDesk getHelp_desk() {
+        return help_desk;
+    }
+
+
+
+    public void setHelp_desk(HelpDesk help_desk) {
+        this.help_desk = help_desk;
+    }
+
+
+
+    public Tecnico getTecnico() {
+        return tecnico;
+    }
+
+
+
+    public void setTecnico(Tecnico tecnico) {
+        this.tecnico = tecnico;
+    }
+
+
+
+    public Servicio getServicio() {
+        return servicio;
+    }
+
+
+
+    public void setServicio(Servicio servicio) {
+        this.servicio = servicio;
+    }
+
+
+
+    public String getNotaCierre() {
+        return notaCierre;
+    }
+
+
+
+    public void setNotaCierre(String notaCierre) {
+        this.notaCierre = notaCierre;
+    }
+
+
+
+    public List<TipoProblema> getTiposDeProblemas() {
+        return tiposDeProblemas;
+    }
+
+
+
+    public void setTiposDeProblemas(List<TipoProblema> tiposDeProblemas) {
+        this.tiposDeProblemas = tiposDeProblemas;
+    }
+
+        
 
 }

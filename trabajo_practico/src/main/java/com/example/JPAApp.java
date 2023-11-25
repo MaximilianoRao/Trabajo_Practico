@@ -1,12 +1,16 @@
 package com.example;
 
+import java.time.LocalDateTime;
+import java.time.Month;
+
 import com.example.constant.TipoNotificacion;
+import com.example.context.Incidente;
 import com.example.entities.Especialidad;
 import com.example.entities.HelpDesk;
 import com.example.entities.Servicio;
 import com.example.entities.Tecnico;
 import com.example.entities.TipoProblema;
-
+import com.example.state.Abierto;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -27,15 +31,9 @@ public class JPAApp {
         try {
             em.getTransaction().begin();
 
-         /*   Servicio  s1 = new Servicio();
-            s1.setNombre("AWS");
-            s1.setDescripcion("ESs");
-            s1.setIncidentes_idIncidentes(1);
-            em.persist(s1);
+         /* 
 
-            HelpDesk h1 = new HelpDesk();
-            h1.setNombre("Maximiliano");
-            em.persist(h1);
+          
 
             TipoProblema t1 = new TipoProblema();
             t1.setTiempoEstResolucion(4);
@@ -66,7 +64,31 @@ public class JPAApp {
             em.persist(s2);
             em.persist(ti2);
             */ 
+            HelpDesk h1 = new HelpDesk();
+            h1.setNombre("Maximiliano");
+            em.persist(h1);
 
+            Servicio  s1 = new Servicio();
+            s1.setNombre("AWS");
+            em.persist(s1);
+
+            Tecnico tc1 = new Tecnico();
+            TipoNotificacion TipoEnum = TipoNotificacion.mail;
+            tc1.setNombre("Ernesto");
+            tc1.setNotificacion(TipoEnum);
+            em.persist(tc1); 
+
+            Incidente i1 = new Incidente(new Abierto());
+            i1.setDescripcion("Problema de internet");
+            i1.setEsComplejo(false);
+            i1.setFechaApertura(LocalDateTime.now());
+            i1.setTitulo("WINDOWS - SIN INTERNET");
+            i1.setHelp_desk(h1);
+            i1.setServicio(s1);
+            i1.setTecnico(tc1);
+            i1.asignar();
+            em.persist(i1);
+            
 
             em.getTransaction().commit();
         } catch (Exception e) {

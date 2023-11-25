@@ -2,15 +2,18 @@ package com.example.entities;
 
 
 
+
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-
+import java.util.*;
 @Entity
 @Table
 public class Especialidad {
@@ -26,6 +29,9 @@ public class Especialidad {
     @ManyToOne
     @JoinColumn(name = "Tipo_de_Problema_idTipo")
     private TipoProblema tipoProblema;
+
+    @ManyToMany(mappedBy = "especialidades")
+    private List<Tecnico> tecnicos;
 
 
 
@@ -53,6 +59,14 @@ public class Especialidad {
         this.tipoProblema = tipoProblema;
     }
 
+    public List<Tecnico> getTecnicos() {
+        return tecnicos;
+    }
 
+    public void setTecnicos(List<Tecnico> tecnicos) {
+        this.tecnicos = tecnicos;
+    }
+
+    
 
 }
