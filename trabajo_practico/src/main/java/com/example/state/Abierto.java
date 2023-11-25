@@ -15,7 +15,7 @@ public class Abierto implements Estado {
     public void asignar(Incidente t) {
         System.out.println("Asignando incidente "+ t.getIdIncidente() + " ...");
         t.setState(new Asignado());
-        t.setEstado(getEstadoAsString());
+        t.setEstado(t.getState().getEstadoAsString());
         
     }
 

@@ -4,6 +4,7 @@ package com.example.entities;
 
 
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,7 +27,7 @@ public class Especialidad {
     @Column
     private String nombre;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "Tipo_de_Problema_idTipo")
     private TipoProblema tipoProblema;
 

@@ -2,6 +2,7 @@ package com.example.entities;
 
 import com.example.context.Incidente;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -31,7 +32,7 @@ public class TipoProblema {
     @Column
     private String descProblema;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "Servicios_idServicio")
     private Servicio servicio;
 

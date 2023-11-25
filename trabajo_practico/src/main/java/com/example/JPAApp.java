@@ -86,8 +86,10 @@ public class JPAApp {
             i1.setHelp_desk(h1);
             i1.setServicio(s1);
             i1.setTecnico(tc1);
-            i1.asignar();
             em.persist(i1);
+            i1.asignar();
+
+            
             
 
             em.getTransaction().commit();

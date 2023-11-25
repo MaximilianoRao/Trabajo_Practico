@@ -7,8 +7,7 @@ import com.example.state.Estado;
 import java.time.LocalDateTime;
 import com.example.entities.TipoProblema;
 
-
-
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -57,19 +56,19 @@ public class Incidente {
     @Transient
     private Estado state;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "HelpDesk_idHelpDesk")
     private HelpDesk help_desk;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "Tecnico_idTecnico")
     private Tecnico tecnico;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "Servicios_idServicio")
     private Servicio servicio;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "incidentes_has_tipo_de_problema", joinColumns = @JoinColumn(name = "idIncidente"),
     inverseJoinColumns = @JoinColumn(name ="idTipo"))
     private List<TipoProblema> tiposDeProblemas;

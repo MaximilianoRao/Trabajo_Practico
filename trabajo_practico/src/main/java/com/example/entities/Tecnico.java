@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.example.constant.TipoNotificacion;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -32,7 +33,7 @@ public class Tecnico {
     @Enumerated(EnumType.STRING)
     private TipoNotificacion notificacion;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "tecnico_has_especialidad", joinColumns = @JoinColumn(name = "idTecnico"),
     inverseJoinColumns = @JoinColumn(name ="idEspecialidad"))
     private List<Especialidad> especialidades;

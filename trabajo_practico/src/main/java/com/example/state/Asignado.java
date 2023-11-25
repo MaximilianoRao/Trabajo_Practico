@@ -26,8 +26,7 @@ public class Asignado implements Estado {
     public void resolver(Incidente t) {
         System.out.println("Resolviendo ticket...");
         t.setState(new Resuelto());
-        t.setEstado(getEstadoAsString());
-        
+        t.setEstado(t.getState().getEstadoAsString());
     }
 
     @Override
