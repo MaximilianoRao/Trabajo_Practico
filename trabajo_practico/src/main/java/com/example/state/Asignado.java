@@ -2,19 +2,13 @@ package com.example.state;
 
 import com.example.context.Incidente;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 
-@Entity
-@Table(name = "estados")
+
+
+
 public class Asignado implements Estado {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idEstado;
+    
 
     @Override
     public void apertura(Incidente t) {
@@ -32,7 +26,13 @@ public class Asignado implements Estado {
     public void resolver(Incidente t) {
         System.out.println("Resolviendo ticket...");
         t.setState(new Resuelto());
+        t.setEstado(getEstadoAsString());
         
+    }
+
+    @Override
+    public String getEstadoAsString() {
+        return "ASIGNADO";
     }
 
     

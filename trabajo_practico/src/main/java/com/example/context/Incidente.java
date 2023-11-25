@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "incidentes")
@@ -40,16 +41,17 @@ public class Incidente {
     @Column
     private String titulo;
 
+    @Column(name = "estado")
+    private String estado;
 
-    @ManyToOne
-    @JoinColumn(name = "Estados_idEstados")
+    @Transient
     private Estado state;
 
 
 
     public Incidente(Integer idIncidente, Estado state) {
         this.idIncidente = idIncidente;
-        this.state = state;
+        this.estado = state.getEstadoAsString();
     }
 
 
@@ -161,5 +163,17 @@ public class Incidente {
         this.state.resolver(null);
 
     }
+
+    public String getEstado() {
+        return estado;
+    }
+
+
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    
 
 }

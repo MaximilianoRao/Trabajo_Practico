@@ -94,16 +94,6 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `trabajo_practico`.`Estados`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `trabajo_practico`.`Estados` (
-  `idEstado` INT NOT NULL,
-  `tipo_estado` VARCHAR(45) NULL,
-  PRIMARY KEY (`idEstado`))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
 -- Table `trabajo_practico`.`Incidentes`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `trabajo_practico`.`Incidentes` (
@@ -117,12 +107,11 @@ CREATE TABLE IF NOT EXISTS `trabajo_practico`.`Incidentes` (
   `Help Desk_idHelpDesk` INT NOT NULL,
   `Tecnico_idTecnico` INT NOT NULL,
   `Servicios_idServicio` INT NOT NULL,
-  `Estados_idEstados` INT NOT NULL,
-  PRIMARY KEY (`idIncidente`, `Help Desk_idHelpDesk`, `Tecnico_idTecnico`, `Servicios_idServicio`, `Estados_idEstados`),
+  `estado` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`idIncidente`, `Help Desk_idHelpDesk`, `Tecnico_idTecnico`, `Servicios_idServicio`),
   INDEX `fk_Incidentes_Help Desk1_idx` (`Help Desk_idHelpDesk` ASC) VISIBLE,
   INDEX `fk_Incidentes_Tecnico1_idx` (`Tecnico_idTecnico` ASC) VISIBLE,
   INDEX `fk_Incidentes_Servicios1_idx` (`Servicios_idServicio` ASC) VISIBLE,
-  INDEX `fk_Incidentes_Estados1_idx` (`Estados_idEstados` ASC) VISIBLE,
   CONSTRAINT `fk_Incidentes_Help Desk1`
     FOREIGN KEY (`Help Desk_idHelpDesk`)
     REFERENCES `trabajo_practico`.`HelpDesk` (`idHelpDesk`)
@@ -136,11 +125,6 @@ CREATE TABLE IF NOT EXISTS `trabajo_practico`.`Incidentes` (
   CONSTRAINT `fk_Incidentes_Servicios1`
     FOREIGN KEY (`Servicios_idServicio`)
     REFERENCES `trabajo_practico`.`Servicios` (`idServicio`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Incidentes_Estados1`
-    FOREIGN KEY (`Estados_idEstados`)
-    REFERENCES `trabajo_practico`.`Estados` (`idEstado`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
