@@ -47,6 +47,17 @@ public class Incidente {
     @Transient
     private Estado state;
 
+    @ManyToOne
+    @JoinColumn(name = "Help Desk_idHelpDesk")
+    private Integer help_desk;
+
+    @ManyToOne
+    @JoinColumn(name = "Tecnico_idTecnico")
+    private Integer tecnico;
+
+    @ManyToOne
+    @JoinColumn(name = "Servicios_idServicio")
+    private Integer servicio;
 
 
     public Incidente(Integer idIncidente, Estado state) {
