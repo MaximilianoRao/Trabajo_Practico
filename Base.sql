@@ -15,12 +15,60 @@ CREATE SCHEMA IF NOT EXISTS `trabajo_practico` DEFAULT CHARACTER SET utf8 ;
 USE `trabajo_practico` ;
 
 -- -----------------------------------------------------
--- Table `trabajo_practico`.`HelpDesk`
+-- Table `trabajo_practico`.`Clientes`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `trabajo_practico`.`HelpDesk` (
-  `idHelpDesk` INT NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `trabajo_practico`.`Clientes` (
+  `idCliente` INT NOT NULL AUTO_INCREMENT,
+  `cuit` INT NULL,
+  `razonsocial` VARCHAR(45) NULL,
   `nombre` VARCHAR(45) NULL,
-  PRIMARY KEY (`idHelpDesk`))
+  PRIMARY KEY (`idCliente`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `trabajo_practico`.`Servicios`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `trabajo_practico`.`Servicios` (
+  `idServicio` INT NOT NULL AUTO_INCREMENT,
+  `nombre` VARCHAR(45) NULL,
+  PRIMARY KEY (`idServicio`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `trabajo_practico`.`Tipo_de_Problema`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `trabajo_practico`.`Tipo_de_Problema` (
+  `idTipo` INT NOT NULL AUTO_INCREMENT,
+  `tiempoMaximo` INT NULL,
+  `tiempoEstResolucion` INT NULL,
+  `descProblema` VARCHAR(45) NULL,
+  `Servicios_idServicio` INT NOT NULL,
+  PRIMARY KEY (`idTipo`, `Servicios_idServicio`),
+  INDEX `fk_Tipo_de_Problema_Servicios1_idx` (`Servicios_idServicio` ASC) VISIBLE,
+  CONSTRAINT `fk_Tipo_de_Problema_Servicios1`
+    FOREIGN KEY (`Servicios_idServicio`)
+    REFERENCES `trabajo_practico`.`Servicios` (`idServicio`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `trabajo_practico`.`Especialidad`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `trabajo_practico`.`Especialidad` (
+  `idEspecialidad` INT NOT NULL AUTO_INCREMENT,
+  `nombre` VARCHAR(45) NULL,
+  `Tipo_de_Problema_idTipo` INT NOT NULL,
+  PRIMARY KEY (`idEspecialidad`, `Tipo_de_Problema_idTipo`),
+  INDEX `fk_Especialidad_Tipo_de_Problema1_idx` (`Tipo_de_Problema_idTipo` ASC) VISIBLE,
+  CONSTRAINT `fk_Especialidad_Tipo_de_Problema1`
+    FOREIGN KEY (`Tipo_de_Problema_idTipo`)
+    REFERENCES `trabajo_practico`.`Tipo_de_Problema` (`idTipo`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
@@ -36,14 +84,22 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `trabajo_practico`.`Tipo_de_Problema`
+-- Table `trabajo_practico`.`HelpDesk`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `trabajo_practico`.`Tipo_de_Problema` (
-  `idTipo` INT NOT NULL AUTO_INCREMENT,
-  `tiempoMaximo` INT NULL,
-  `tiempoEstResolucion` INT NULL,
-  `descProblema` VARCHAR(45) NULL,
-  PRIMARY KEY (`idTipo`))
+CREATE TABLE IF NOT EXISTS `trabajo_practico`.`HelpDesk` (
+  `idHelpDesk` INT NOT NULL AUTO_INCREMENT,
+  `nombre` VARCHAR(45) NULL,
+  PRIMARY KEY (`idHelpDesk`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `trabajo_practico`.`Estados`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `trabajo_practico`.`Estados` (
+  `idEstado` INT NOT NULL,
+  `tipo_estado` VARCHAR(45) NULL,
+  PRIMARY KEY (`idEstado`))
 ENGINE = InnoDB;
 
 
@@ -52,8 +108,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `trabajo_practico`.`Incidentes` (
   `idIncidente` INT NOT NULL AUTO_INCREMENT,
-  `estado` ENUM('abierto', 'asignado', 'resuelto') NULL,
-  `tiempoEstResol` VARCHAR(45) NULL,
   `notaCierre` VARCHAR(45) NULL,
   `fechaApertura` DATETIME NULL,
   `esComplejo` TINYINT NULL,
@@ -62,11 +116,13 @@ CREATE TABLE IF NOT EXISTS `trabajo_practico`.`Incidentes` (
   `titulo` VARCHAR(45) NULL,
   `Help Desk_idHelpDesk` INT NOT NULL,
   `Tecnico_idTecnico` INT NOT NULL,
-  `Tipo de Problema_idTipo` INT NOT NULL,
-  PRIMARY KEY (`idIncidente`, `Help Desk_idHelpDesk`, `Tecnico_idTecnico`, `Tipo de Problema_idTipo`),
+  `Servicios_idServicio` INT NOT NULL,
+  `Estados_idEstados` INT NOT NULL,
+  PRIMARY KEY (`idIncidente`, `Help Desk_idHelpDesk`, `Tecnico_idTecnico`, `Servicios_idServicio`, `Estados_idEstados`),
   INDEX `fk_Incidentes_Help Desk1_idx` (`Help Desk_idHelpDesk` ASC) VISIBLE,
   INDEX `fk_Incidentes_Tecnico1_idx` (`Tecnico_idTecnico` ASC) VISIBLE,
-  INDEX `fk_Incidentes_Tipo de Problema1_idx` (`Tipo de Problema_idTipo` ASC) VISIBLE,
+  INDEX `fk_Incidentes_Servicios1_idx` (`Servicios_idServicio` ASC) VISIBLE,
+  INDEX `fk_Incidentes_Estados1_idx` (`Estados_idEstados` ASC) VISIBLE,
   CONSTRAINT `fk_Incidentes_Help Desk1`
     FOREIGN KEY (`Help Desk_idHelpDesk`)
     REFERENCES `trabajo_practico`.`HelpDesk` (`idHelpDesk`)
@@ -77,59 +133,16 @@ CREATE TABLE IF NOT EXISTS `trabajo_practico`.`Incidentes` (
     REFERENCES `trabajo_practico`.`Tecnico` (`idTecnico`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Incidentes_Tipo de Problema1`
-    FOREIGN KEY (`Tipo de Problema_idTipo`)
-    REFERENCES `trabajo_practico`.`Tipo_de_Problema` (`idTipo`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `trabajo_practico`.`Servicios`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `trabajo_practico`.`Servicios` (
-  `idServicio` INT NOT NULL AUTO_INCREMENT,
-  `nombre` VARCHAR(45) NULL,
-  `descripcion` LONGTEXT NULL,
-  `Incidentes_idIncidentes` INT NOT NULL,
-  PRIMARY KEY (`idServicio`, `Incidentes_idIncidentes`),
-  INDEX `fk_Servicios_Incidentes1_idx` (`Incidentes_idIncidentes` ASC) VISIBLE,
-  CONSTRAINT `fk_Servicios_Incidentes1`
-    FOREIGN KEY (`Incidentes_idIncidentes`)
-    REFERENCES `trabajo_practico`.`Incidentes` (`idIncidente`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `trabajo_practico`.`Clientes`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `trabajo_practico`.`Clientes` (
-  `idCliente` INT NOT NULL AUTO_INCREMENT,
-  `cuit` INT NULL,
-  `razonsocial` VARCHAR(45) NULL,
-  `nombre` VARCHAR(45) NULL,
-  `apellidos` VARCHAR(45) NULL,
-  `Servicios_idServicios1` INT NOT NULL,
-  PRIMARY KEY (`idCliente`, `Servicios_idServicios1`),
-  INDEX `fk_Clientes_Servicios1_idx` (`Servicios_idServicios1` ASC) VISIBLE,
-  CONSTRAINT `fk_Clientes_Servicios1`
-    FOREIGN KEY (`Servicios_idServicios1`)
+  CONSTRAINT `fk_Incidentes_Servicios1`
+    FOREIGN KEY (`Servicios_idServicio`)
     REFERENCES `trabajo_practico`.`Servicios` (`idServicio`)
     ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Incidentes_Estados1`
+    FOREIGN KEY (`Estados_idEstados`)
+    REFERENCES `trabajo_practico`.`Estados` (`idEstado`)
+    ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `trabajo_practico`.`Especialidad`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `trabajo_practico`.`Especialidad` (
-  `idEspecialidad` INT NOT NULL AUTO_INCREMENT,
-  `nombre` VARCHAR(45) NULL,
-  PRIMARY KEY (`idEspecialidad`))
 ENGINE = InnoDB;
 
 
@@ -156,22 +169,44 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `trabajo_practico`.`Tipo de Problema_has_Especialidad`
+-- Table `trabajo_practico`.`Clientes_has_Servicios`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `trabajo_practico`.`Tipo de Problema_has_Especialidad` (
-  `Tipo de Problema_idTipo` INT NOT NULL,
-  `Especialidad_idEspecialidad` INT NOT NULL,
-  PRIMARY KEY (`Tipo de Problema_idTipo`, `Especialidad_idEspecialidad`),
-  INDEX `fk_Tipo de Problema_has_Especialidad_Especialidad1_idx` (`Especialidad_idEspecialidad` ASC) VISIBLE,
-  INDEX `fk_Tipo de Problema_has_Especialidad_Tipo de Problema1_idx` (`Tipo de Problema_idTipo` ASC) VISIBLE,
-  CONSTRAINT `fk_Tipo de Problema_has_Especialidad_Tipo de Problema1`
-    FOREIGN KEY (`Tipo de Problema_idTipo`)
-    REFERENCES `trabajo_practico`.`Tipo_de_Problema` (`idTipo`)
+CREATE TABLE IF NOT EXISTS `trabajo_practico`.`Clientes_has_Servicios` (
+  `Clientes_idCliente` INT NOT NULL,
+  `Servicios_idServicio` INT NOT NULL,
+  PRIMARY KEY (`Clientes_idCliente`, `Servicios_idServicio`),
+  INDEX `fk_Clientes_has_Servicios_Servicios1_idx` (`Servicios_idServicio` ASC) VISIBLE,
+  INDEX `fk_Clientes_has_Servicios_Clientes1_idx` (`Clientes_idCliente` ASC) VISIBLE,
+  CONSTRAINT `fk_Clientes_has_Servicios_Clientes1`
+    FOREIGN KEY (`Clientes_idCliente`)
+    REFERENCES `trabajo_practico`.`Clientes` (`idCliente`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Tipo de Problema_has_Especialidad_Especialidad1`
-    FOREIGN KEY (`Especialidad_idEspecialidad`)
-    REFERENCES `trabajo_practico`.`Especialidad` (`idEspecialidad`)
+  CONSTRAINT `fk_Clientes_has_Servicios_Servicios1`
+    FOREIGN KEY (`Servicios_idServicio`)
+    REFERENCES `trabajo_practico`.`Servicios` (`idServicio`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `trabajo_practico`.`Incidentes_has_Tipo_de_Problema`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `trabajo_practico`.`Incidentes_has_Tipo_de_Problema` (
+  `Incidentes_idIncidente` INT NOT NULL,
+  `Tipo_de_Problema_idTipo` INT NOT NULL,
+  PRIMARY KEY (`Incidentes_idIncidente`, `Tipo_de_Problema_idTipo`),
+  INDEX `fk_Incidentes_has_Tipo_de_Problema_Tipo_de_Problema1_idx` (`Tipo_de_Problema_idTipo` ASC) VISIBLE,
+  INDEX `fk_Incidentes_has_Tipo_de_Problema_Incidentes1_idx` (`Incidentes_idIncidente` ASC) VISIBLE,
+  CONSTRAINT `fk_Incidentes_has_Tipo_de_Problema_Incidentes1`
+    FOREIGN KEY (`Incidentes_idIncidente`)
+    REFERENCES `trabajo_practico`.`Incidentes` (`idIncidente`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Incidentes_has_Tipo_de_Problema_Tipo_de_Problema1`
+    FOREIGN KEY (`Tipo_de_Problema_idTipo`)
+    REFERENCES `trabajo_practico`.`Tipo_de_Problema` (`idTipo`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;

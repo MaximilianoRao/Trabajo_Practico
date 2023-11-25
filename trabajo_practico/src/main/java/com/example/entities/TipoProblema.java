@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -21,6 +23,13 @@ public class TipoProblema {
 
     @Column
     private Integer tiempoEstResolucion;
+
+    @Column
+    private String descProblema;
+
+    @ManyToOne
+    @JoinColumn(name = "Servicios_idServicio")
+    private Servicio servicio;
 
     public Integer getIdTipo() {
         return idTipo;
@@ -54,6 +63,12 @@ public class TipoProblema {
         this.descProblema = descProblema;
     }
 
-    @Column
-    private String descProblema;
+    public Servicio getServicio() {
+        return servicio;
+    }
+
+    public void setServicio(Servicio servicio) {
+        this.servicio = servicio;
+    }
+
 }

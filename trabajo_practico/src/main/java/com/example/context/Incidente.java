@@ -1,22 +1,48 @@
 package com.example.context;
 
 import com.example.state.Estado;
+import java.time.LocalDateTime;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
+@Entity
+@Table(name = "incidentes")
 public class Incidente {
     
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
     private Integer idIncidente;
-    private Integer tiempoEstResol;
+
+    
+
+    @Column
     private String notaCiere;
 
-    private java.util.Date fechaApertura;
+    @Column
+    private LocalDateTime fechaApertura;
 
+    @Column
     private Boolean esComplejo;
-    private java.util.Date fechaResolucion;
+
+    @Column
+    private LocalDateTime fechaResolucion;
+
+    @Column
     private String descripcion;
+
+    @Column
     private String titulo;
 
 
-
+    @ManyToOne
+    @JoinColumn(name = "Estados_idEstados")
     private Estado state;
 
 
@@ -38,20 +64,6 @@ public class Incidente {
         this.idIncidente = idIncidente;
     }
 
-
-
-    public Integer getTiempoEstResol() {
-        return tiempoEstResol;
-    }
-
-
-
-    public void setTiempoEstResol(Integer tiempoEstResol) {
-        this.tiempoEstResol = tiempoEstResol;
-    }
-
-
-
     public String getNotaCiere() {
         return notaCiere;
     }
@@ -64,13 +76,13 @@ public class Incidente {
 
 
 
-    public java.util.Date getFechaApertura() {
+    public LocalDateTime getFechaApertura() {
         return fechaApertura;
     }
 
 
 
-    public void setFechaApertura(java.util.Date fechaApertura) {
+    public void setFechaApertura(LocalDateTime fechaApertura) {
         this.fechaApertura = fechaApertura;
     }
 
@@ -88,13 +100,13 @@ public class Incidente {
 
 
 
-    public java.util.Date getFechaResolucion() {
+    public LocalDateTime getFechaResolucion() {
         return fechaResolucion;
     }
 
 
 
-    public void setFechaResolucion(java.util.Date fechaResolucion) {
+    public void setFechaResolucion(LocalDateTime fechaResolucion) {
         this.fechaResolucion = fechaResolucion;
     }
 

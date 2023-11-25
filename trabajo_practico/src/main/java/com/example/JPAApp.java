@@ -7,12 +7,13 @@ import com.example.entities.Servicio;
 import com.example.entities.Tecnico;
 import com.example.entities.TipoProblema;
 
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
 public class JPAApp {
-
+    
     public static EntityManager getEntityManager(){
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPA-unit");
         EntityManager em = emf.createEntityManager();
@@ -46,12 +47,25 @@ public class JPAApp {
             TipoNotificacion TipoEnum = TipoNotificacion.mail;
             tc1.setNombre("Ernesto");
             tc1.setNotificacion(TipoEnum);
-            em.persist(tc1); */ 
+            em.persist(tc1); 
 
             Especialidad e1 = new Especialidad();
             e1.setNombre("Windows");
-            em.persist(e1);
+            em.persist(e1); 
 
+            Servicio s2 = new Servicio();
+            s2.setNombre("Soporte SAP");
+            
+
+            TipoProblema ti2 = new TipoProblema();
+            ti2.setTiempoMaximo(240);
+            ti2.setTiempoEstResolucion(120);
+            ti2.setDescProblema("Error de conexion");
+            ti2.setServicio(s2);
+
+            em.persist(s2);
+            em.persist(ti2);
+            */ 
 
 
             em.getTransaction().commit();
